@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
+  IsOptional,
   IsString,
 } from 'class-validator';
 
@@ -24,4 +25,8 @@ export class CreateSongDto {
   @IsNotEmpty()
   @IsMilitaryTime()
   readonly duration: Date;
+
+  @IsString()
+  @IsOptional()
+  lyrics: string;
 }
