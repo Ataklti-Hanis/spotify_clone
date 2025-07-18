@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
@@ -11,17 +12,28 @@ import {
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song-dto';
+import { Song } from './song.entity';
 
 @Controller('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
   @Post()
-  create(@Body() createSongDto: CreateSongDto) {
+  create(@Body() createSongDto: CreateSongDto): Promise<Song> {
     return this.songsService.create(createSongDto);
   }
   @Get()
-  findAll() {
-    return this.songsService.findAll();
+  findAll(): Promise<Song[]> {
+    try {
+      return this.songsService.findAll();
+    } catch (err) {
+      throw new HttpException(
+        'server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: err,
+        },
+      );
+    }
   }
 
   @Get(':id')
