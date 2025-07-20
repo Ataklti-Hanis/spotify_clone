@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Post,
@@ -13,6 +14,9 @@ import {
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song-dto';
 import { Song } from './song.entity';
+import { promises } from 'dns';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { UpdateSongDto } from './dto/update-song-dto';
 
 @Controller('songs')
 export class SongsController {
@@ -37,22 +41,29 @@ export class SongsController {
   }
 
   @Get(':id')
-  findOne(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    id: number,
-  ) {
-    return `fetch songs based on Id ${typeof id}`;
-  }
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Song> {
+    const song = await this.songsService.findOne(id);
 
+    if (!song) {
+      throw new NotFoundException(`Song with id ${id} not found`);
+    }
+    return song;
+  }
   @Put(':id')
-  update() {
-    return 'update song based on id';
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSong: UpdateSongDto,
+  ): Promise<UpdateResult> {
+    return this.songsService.update(id, updateSong);
   }
   @Delete(':id')
-  delete() {
-    return 'delete songs based on id';
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+    const songToDelete = await this.songsService.remove(id);
+
+    if (songToDelete.affected === 0) {
+      throw new NotFoundException(`Song with id ${id} not found`);
+    }
+
+    return songToDelete;
   }
 }
