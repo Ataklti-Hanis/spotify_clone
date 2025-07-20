@@ -13,7 +13,7 @@ export class Song {
   artists: string[];
 
   @Column('date')
-  releaseDAte: Date;
+  releaseDate: Date;
 
   @Column('time')
   duration: Date;
