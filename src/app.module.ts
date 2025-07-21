@@ -6,6 +6,7 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Song } from './songs/song.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Song } from './songs/song.entity';
       entities: [Song],
     }),
     SongsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
