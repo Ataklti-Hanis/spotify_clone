@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 import { Song } from './songs/song.entity';
 import { Artist } from './artist/artist-entity';
 import { User } from './users/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { User } from './users/user.entity';
       entities: [Song, Artist, User],
     }),
     SongsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
