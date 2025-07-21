@@ -6,6 +6,9 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Song } from './songs/song.entity';
+import { Artist } from './artist/artist-entity';
+import { User } from './users/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -17,9 +20,10 @@ import { Song } from './songs/song.entity';
       username: 'ate',
       password: '12345678',
       synchronize: true,
-      entities: [Song],
+      entities: [Song, Artist, User],
     }),
     SongsModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
