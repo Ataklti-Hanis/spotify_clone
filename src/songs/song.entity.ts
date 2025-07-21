@@ -1,5 +1,12 @@
 import { IsOptional } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Artist } from 'src/artist/artist-entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('song')
 export class Song {
@@ -9,8 +16,8 @@ export class Song {
   @Column()
   title: string;
 
-  @Column('varchar', { array: true })
-  artists: string[];
+  // @Column('varchar', { array: true })
+  // artists: string[];
 
   @Column('date')
   releaseDate: Date;
@@ -21,4 +28,8 @@ export class Song {
   @Column()
   @IsOptional()
   lyrics: string;
+
+  @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
+  @JoinTable({ name: 'artist_song' })
+  artists: Artist[];
 }

@@ -4,9 +4,11 @@ import {
   IsDateString,
   IsMilitaryTime,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
 } from 'class-validator';
+import { IsNull } from 'typeorm';
 
 export class CreateSongDto {
   @IsString()
@@ -15,7 +17,7 @@ export class CreateSongDto {
 
   @IsNotEmpty()
   @IsArray()
-  @IsString({ each: true })
+  @IsNumber({}, { each: true })
   readonly artist: string[];
 
   @IsNotEmpty()
